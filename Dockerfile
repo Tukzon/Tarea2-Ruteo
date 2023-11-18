@@ -13,3 +13,7 @@ RUN apt-get update \
 
 COPY postgresql.conf /etc/postgresql/13/main/postgresql.conf
 COPY pg_hba.conf /etc/postgresql/13/main/pg_hba.conf
+
+# Copiar otros archivos necesarios
+COPY fallos /fallos
+COPY metadata /metadata

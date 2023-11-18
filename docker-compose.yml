@@ -1,20 +1,20 @@
 version: '3.8'
 
 services:
-  postgis:
+  postgis_t2:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: postgis_container
+    container_name: postgis_container_t2
     environment:
       POSTGRES_DB: ruteo
-      POSTGRES_USER: root
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ruteo
     ports:
       - "5432:5432"
     volumes:
-      - postgis_data:/var/lib/postgresql/data
+      - postgis_data_t2:/var/lib/postgresql/data
       - ./install_pgrouting.sh:/docker-entrypoint-initdb.d/install_pgrouting.sh
 
 volumes:
-  postgis_data:
+  postgis_data_t2:

@@ -6,3 +6,5 @@ def get_accidentes_transito():
     r = requests.get(url)
     data = json.loads(r.text)
     return data
+
+print(get_accidentes_transito())
