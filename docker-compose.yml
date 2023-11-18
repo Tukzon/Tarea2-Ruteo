@@ -1,17 +1,20 @@
-version: '3'
+version: '3.8'
+
 services:
-  db:
-    build: .
+  postgis:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: postgis_container
     environment:
-      POSTGRES_DB: sseguro
+      POSTGRES_DB: ruteo
       POSTGRES_USER: root
       POSTGRES_PASSWORD: ruteo
     ports:
       - "5432:5432"
     volumes:
-      - my_dbdata:/var/lib/postgresql/data
-    # Descomenta la siguiente línea si tienes scripts de inicialización personalizados
-    # - ./initdb.d:/docker-entrypoint-initdb.d
+      - postgis_data:/var/lib/postgresql/data
+      - ./install_pgrouting.sh:/docker-entrypoint-initdb.d/install_pgrouting.sh
 
 volumes:
-  my_dbdata:
+  postgis_data:
