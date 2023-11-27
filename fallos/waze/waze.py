@@ -23,7 +23,7 @@ def obtener_datos_waze(api_key, latitud_inicio, longitud_inicio, latitud_final, 
         return f"Error en la solicitud: {response.status_code}"
 
 # Usar la función
-api_key = '6b8594f469msh1a559b7259e5fe2p1b8185jsn8951e0967107'
+api_key = ''
 latitud_inicio = 'LATITUD_INICIO'
 longitud_inicio = 'LONGITUD_INICIO'
 latitud_final = 'LATITUD_FINAL'

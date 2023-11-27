@@ -44,7 +44,7 @@ def obtener_location_key(api_key, latitud, longitud):
         return f"Error en la solicitud: {response.status_code}"
 
 # Usar la función
-api_key = 'YyAnoNNyAfjzO4QgNtXwntcnA93Qd3jd '
+api_key = ''
 latitud = '40.7128'  # Ejemplo de latitud
 longitud = '-74.0060'  # Ejemplo de longitud
 
