@@ -8,6 +8,7 @@ RUN apt-get update \
        postgresql-13-pgrouting \
        ca-certificates \
        gnupg \
+       gdal-bin \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
