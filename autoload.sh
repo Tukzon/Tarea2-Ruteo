@@ -15,6 +15,8 @@ psql -U postgres -d ruteo -h localhost -f /infraestructura/gtfs_red/gtfs2rutas.s
 echo "Datos de GTFS cargados exitosamente"
 echo "Cargando estaciones de metro..."
 psql -U postgres -d ruteo -h localhost -f /infraestructura/EstacionesScript.sql
+echo "Cargano mapa de metro..."
+ogr2ogr -f "PostgreSQL" PG:"dbname=ruteo user=postgres password=ruteo host=localhost port=5432" /infraestructura/metro_mapa.geojson -nln metro_mapa -overwrite
 echo "Infraestructura cargada exitosamente"
 echo "Cargando metadata..."
 ogr2ogr -f "PostgreSQL" PG:"dbname=ruteo user=postgres password=ruteo host=localhost port=5432" /metadata/accidentestransito/accidentes_transito.json -nln accidentes_transito -overwrite
