@@ -1,5 +1,7 @@
-import requests
 
+import requests
+import json
+import os
 
 def obtener_condiciones_climaticas(api_key, location_key):
     # URL de la API para condiciones actuales
@@ -53,3 +55,9 @@ print(location_key)
 
 condiciones = obtener_condiciones_climaticas(api_key, location_key)
 print(condiciones)
+
+def save_json(data):
+    with open('./paz.json', 'w') as file:
+        json.dump(json.loads(data), file)
+
+save_json(condiciones)
