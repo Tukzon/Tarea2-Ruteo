@@ -19,3 +19,4 @@ COPY pg_hba.conf /etc/postgresql/13/main/pg_hba.conf
 COPY fallos /fallos
 COPY metadata /metadata
 COPY infraestructura /infraestructura
+COPY autoload.sh /autoload.sh
