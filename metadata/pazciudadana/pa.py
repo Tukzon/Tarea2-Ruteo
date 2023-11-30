@@ -1,4 +1,6 @@
 import requests
+import pandas as pd
+import json
 
 # URL de la solicitud
 url = "https://datoscomunales.pazciudadana.cl/excel?t=2023-04-01&q=denuncias&f=quarter"
@@ -33,3 +35,21 @@ if response.status_code == 200:
     print("Archivo descargado con éxito.")
 else:
     print("Error en la solicitud:", response.status_code)
+
+
+def read_data_to_json(file_path):
+    excel_data = pd.ExcelFile(file_path, engine='openpyxl')
+    data_df = pd.read_excel(excel_data, sheet_name=0, header=6)
+    
+    cleaned_data_df = data_df.drop(data_df.index[0]).reset_index(drop=True)
+    
+    cleaned_data_df.columns = ['Tipo de Información', 'Comuna', 'Frecuencia', 'Tasa cada 100Mil', 'Rango']
+    
+    cleaned_data_df = cleaned_data_df.drop(columns=['Tipo de Información'])
+    
+    json_data = cleaned_data_df.to_json(orient='records')
+    
+    return json_data
+
+
+respuesta = read_data_to_json("data/pazciudadana.xlsx")
