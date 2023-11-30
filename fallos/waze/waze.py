@@ -1,4 +1,6 @@
 import requests
+import json
+import os
 
 def obtener_datos_waze(api_key, latitud_inicio, longitud_inicio, latitud_final, longitud_final):
     url = "https://waze.p.rapidapi.com/alerts-and-jams"
@@ -31,3 +33,11 @@ longitud_final = 'LONGITUD_FINAL'
 
 datos = obtener_datos_waze(api_key, latitud_inicio, longitud_inicio, latitud_final, longitud_final)
 print(datos)
+
+
+def save_json(data):
+    with open('./waze.json', 'w') as file:
+        json.dump(data, file)
+
+save_json(datos)
+

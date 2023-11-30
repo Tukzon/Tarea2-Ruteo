@@ -1,16 +1,29 @@
 import requests
 import pandas as pd
 import json
+import os
+from unidecode import unidecode
+
+def eliminar_tildes(texto):
+    return unidecode(texto) if isinstance(texto, str) else texto
+
+def limpiar_texto(texto):
+    if isinstance(texto, str):
+        texto = eliminar_tildes(texto)
+        texto = texto.replace('\\', '')  # Eliminar backslashes
+        # Aquí puedes añadir más reemplazos o limpieza según necesites
+    return texto
 
 # URL de la solicitud
-url = "https://datoscomunales.pazciudadana.cl/excel?t=2023-04-01&q=denuncias&f=quarter"
+
+url = "https://datoscomunales.pazciudadana.cl/excel?t=2023-04-01&q=casospoliciales&f=quarter"
 
 # Encabezados personalizados
 headers = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
     'Accept-Encoding': 'gzip, deflate, br',
     'Accept-Language': 'en-US,en;q=0.9',
-    'Cookie': 'gid=GA1.2.2094129065.1700963169; _gcl_au=1.1.1817751939.1700968661; laravel_session=eyJpdiI6ImdhV0RvNm44UFlDUHRweUkxZkFBcEd2UWc5REJIY1lPNGRyUHM1NTNUMkk9IiwidmFsdWUiOiJ5cWhiVnJ1NDdMZmNZdlwvOGo0QWFQNDNUWVNWa2JWSURjUEc2eFUyXC8raVNYajlLbDYzMFwvM1ZYT3dsSFZmcVFHWndubmtTMTZ6WWVOUUFGZWdyUnN6Zz09IiwibWFjIjoiYTM0NzEwNTVkMmU3NDhiZTFhZDdlOGFhZTEyYTQ3N2IyMDA3OGY4NjAxOTFjNTRmMDIxM2JlZmQxM2FmY2RlYyJ9; _ga_XJPWCEHCEV=GS1.1.1701027061.4.1.1701027061.0.0.0; _gat_gtag_UA_77866860_1=1; _ga=GA1.1.995760676.1700963169; _ga_D2ZEK0HR6G=GS1.1.1701029710.3.0.1701029713.0.0.0',
+    'Cookie': 'laravel_session=eyJpdiI6ImVodEdcL1VcL3dFZHc3Rmd0cEp1VnFXbmVyUjhlaVFRMG1uTlBMSXZxeFVvcz0iLCJ2YWx1ZSI6InhNS1RTTG03djVBR1VWMTBITmZkUmZSQnRjcnhldlcrNFVaNmpoSzB1XC9ZSHV6STJOQklFTkdJMEs4RnY2UE5JOTgzWFI2MHl6TGxQd2hKRFpKSm52QT09IiwibWFjIjoiNmFjYzBiMTE2MGMzMDlhNjBkMmQ2YzI4NGE3NGNhY2I0MDI1YWFmN2I0YzI4M2M0YTc4YzA0ZGZjNjUyNmUzZSJ9',
     'If-Modified-Since': 'Sun, 26 Nov 2023 04:13:34 GMT',
     'Referer': 'https://datoscomunales.pazciudadana.cl/',
     'Sec-Ch-Ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
@@ -44,6 +57,11 @@ def read_data_to_json(file_path):
     cleaned_data_df = data_df.drop(data_df.index[0]).reset_index(drop=True)
     
     cleaned_data_df.columns = ['Tipo de Información', 'Comuna', 'Frecuencia', 'Tasa cada 100Mil', 'Rango']
+
+    for columna in cleaned_data_df.columns:
+        cleaned_data_df[columna] = cleaned_data_df[columna].apply(limpiar_texto)
+        cleaned_data_df[columna] = cleaned_data_df[columna].apply(eliminar_tildes)
+        
     
     cleaned_data_df = cleaned_data_df.drop(columns=['Tipo de Información'])
     
@@ -53,3 +71,9 @@ def read_data_to_json(file_path):
 
 
 respuesta = read_data_to_json("data/pazciudadana.xlsx")
+
+def save_json(data):
+    with open('./paz.json', 'w') as file:
+        json.dump(json.loads(data), file)
+
+save_json(respuesta)
